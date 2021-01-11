@@ -1,0 +1,19 @@
+{
+  "name": "aaff",
+  "version": "1.0.0",
+  "description": "Ann Arbor Film Festival",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/philen/aaff.git"
+  },
+  "author": "philen",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/philen/aaff/issues"
+  },
+  "homepage": "https://github.com/philen/aaff#readme"
+}
