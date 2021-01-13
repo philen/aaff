@@ -12,6 +12,7 @@
 <script src="https://cdn.amcharts.com/lib/4/maps.js"></script>
 <script src="https://cdn.amcharts.com/lib/4/geodata/worldLow.js"></script>
 <script src="https://cdn.amcharts.com/lib/4/geodata/usaLow.js"></script>
+<script src="https://cdn.amcharts.com/lib/4/geodata/canadaLow.js"></script>
 <script src="https://cdn.amcharts.com/lib/4/themes/animated.js"></script>
 
 <!-- Chart code -->
@@ -56,6 +57,19 @@ usPolygonTemplate.nonScalingStroke = true;
 
 // Hover state
 var hs = usPolygonTemplate .states.create("hover");
+hs.properties.fill = am4core.color("#367B25");
+
+// Series for Canada map
+var canadaSeries = chart.series.push(new am4maps.MapPolygonSeries());
+canadaSeries.geodata = am4geodata_canadaLow;
+
+var caPolygonTemplate = canadaSeries.mapPolygons.template;
+caPolygonTemplate.tooltipText = "{name}";
+caPolygonTemplate.fill = chart.colors.getIndex(1);
+caPolygonTemplate.nonScalingStroke = true;
+
+// Hover state
+var hs = caPolygonTemplate .states.create("hover");
 hs.properties.fill = am4core.color("#367B25");
 
 }); // end am4core.ready()
