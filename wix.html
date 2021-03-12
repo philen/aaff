@@ -1,0 +1,856 @@
+<!-- Styles -->
+<style>
+#chartdiv {
+  width: 100%;
+  height: 100%;
+  font-family: Helvetica, Arial, sans-serif
+}
+</style>
+
+<!-- Resources -->
+<script src="https://cdn.amcharts.com/lib/4/core.js"></script>
+<script src="https://cdn.amcharts.com/lib/4/maps.js"></script>
+<script src="https://cdn.amcharts.com/lib/4/geodata/worldLow.js"></script>
+<script src="https://cdn.amcharts.com/lib/4/geodata/usaLow.js"></script>
+<script src="https://cdn.amcharts.com/lib/4/geodata/canadaLow.js"></script>
+<script src="https://cdn.amcharts.com/lib/4/themes/animated.js"></script>
+
+<!-- Chart code -->
+<script>
+// Themeing
+const defaultColor = am4core.color("#F54B14");
+const hoverColor = am4core.color("#F3E484");
+
+// Film Data
+var films = {
+  "JP": [
+    [
+      "Shinya Isobe",
+      "13",
+      "Yokohama"
+    ],
+    [
+      "Michael Lyons",
+      "Queen of Dots",
+      "Kyoto"
+    ]
+  ],
+  "HK": [
+    [
+      "Jennie MaryTai Liu, Simon Liu",
+      "-force-",
+      "Hong Kong"
+    ],
+    [
+      "Daniel Chein, Elizabeth Lo",
+      "About A Home",
+      "Hong Kong / Oakland"
+    ]
+  ],
+  "FR": [
+    [
+      "Jean-Baptiste Decav\u00e8le",
+      "...l'admirable profondeur, du jour \u00e0 la folie",
+      "Paris"
+    ],
+    [
+      "Sylvie Denet",
+      "Ici",
+      "Aubervilliers"
+    ],
+    [
+      "Margaux Guillemard",
+      "The Last Name of John Cage",
+      "Paris"
+    ]
+  ],
+  "MX": [
+    [
+      "Charles Fairbanks, Sa\u00fal Kak",
+      "( ( ( ( ( /*\\ ) ) ) ) ) aka Echoes of the Volcano",
+      "Oaxaca / San Cristobal de las Casas"
+    ],
+    [
+      "Marina Santana De la Torre",
+      "Alternative Facts",
+      "Mexico City"
+    ]
+  ],
+  "US-WI": [
+    [
+      "Sine \u00d6zbilge, Imge \u00d6zbilge",
+      "#21xoxo",
+      ""
+    ],
+    [
+      "Cecelia Condit",
+      "I've Been Afraid",
+      "Milwaukee"
+    ],
+    [
+      "Dan S",
+      "The Truth About Hastings",
+      "Minneapolis / Boulder"
+    ]
+  ],
+  "BE": [
+    [
+      "Sine \u00d6zbilge, Imge \u00d6zbilge",
+      "#21xoxo",
+      ""
+    ],
+    [
+      "Sarah & Charles",
+      "In the Hands of Puppets",
+      "Brussels"
+    ],
+    [
+      "Vincent Meessen",
+      "Just a Movement",
+      "Brussels"
+    ],
+    [
+      "Joeri Verbesselt",
+      "retreat",
+      "Brussels"
+    ],
+    [
+      "Dorian Jespers",
+      "Sun Dog",
+      "Brussels"
+    ]
+  ],
+  "GB": [
+    [
+      "Ed Sayers",
+      "3 Sons",
+      "London"
+    ],
+    [
+      "Katharine Fry",
+      "A deal with god",
+      "London"
+    ],
+    [
+      "Laura Cameron-Lewis",
+      "Danni the Champion",
+      "Isle of Lewis"
+    ],
+    [
+      "Hannah Brewerton",
+      "Hit and Run",
+      "London"
+    ],
+    [
+      "Karen Russo",
+      "Junkerhaus",
+      "London"
+    ],
+    [
+      "Dorothy Allen-Pickard",
+      "Material Bodies",
+      "London"
+    ],
+    [
+      "Adam Lewis Jacob",
+      "People Meeting in a Room",
+      "Glasgow"
+    ],
+    [
+      "Amy Daniel",
+      "The Legend of Bryngolau",
+      "Aberystwyth"
+    ],
+    [
+      "Ellen Sampson",
+      "Things Floating in the Hudson",
+      "London"
+    ],
+    [
+      "Kamila Kuc",
+      "uchronia, no.1",
+      "London"
+    ]
+  ],
+  "US-IL": [
+    [
+      "Yoni Goldstein, Meredith Zielke, Sebastian Alvarez, Andrew Benz",
+      "A Machine to Live In",
+      "Chicago"
+    ],
+    [
+      "Steve Wood",
+      "Electric Eye",
+      "Chicago"
+    ],
+    [
+      "Sanaz Sohrabi",
+      "One Image, Two Acts",
+      "Chicago / Montr\u00e9al"
+    ],
+    [
+      "Lori Felker",
+      "Spontaneous",
+      "Chicago"
+    ],
+    [
+      "Jim Finn",
+      "The Annotated Field Guide of Ulysses S. Grant",
+      "Chicago"
+    ]
+  ],
+  "US-CO": [
+    [
+      "Emily Van Loan",
+      "A Watched Cunt Never Cums",
+      "Boulder"
+    ],
+    [
+      "Jason F Bernagozzi",
+      "Dialectic",
+      "Fort Collins"
+    ],
+    [
+      "Dan S",
+      "The Truth About Hastings",
+      "Boulder / Minneapolis"
+    ]
+  ],
+  "US-CA": [
+    [
+      "Daniel Chein, Elizabeth Lo",
+      "About A Home",
+      "Oakland / Hong Kong"
+    ],
+    [
+      "Mar Sudac",
+      "Astonishing Horizon!",
+      "Los Angeles "
+    ],
+    [
+      "Devin Jie Allen",
+      "Encounters in Light",
+      "Petaluma"
+    ],
+    [
+      "Kang Min Kim",
+      "KKUM",
+      "Glendale"
+    ],
+    [
+      "George Metaxas",
+      "Mother Bunker",
+      "Los Angeles"
+    ],
+    [
+      "Eryka Dellenbach",
+      "Schroon Lake",
+      "Albany"
+    ],
+    [
+      "Miranda Javid",
+      "The Wind",
+      "Los Angeles"
+    ],
+    [
+      "Christine Haroutounian",
+      "World (\u0531\u0577\u056d\u0561\u0580\u0570)",
+      "Los Angeles"
+    ]
+  ],
+  "DE": [
+    [
+      "Anna Marziano",
+      "Al Largo",
+      "Berlin"
+    ],
+    [
+      "NEOZOON",
+      "FragMANts",
+      "Dresden / Berlin"
+    ],
+    [
+      "Adi Gelbart",
+      "Gelbart: March of the Thinking Machines",
+      "Berlin"
+    ],
+    [
+      "Hannah Hummel",
+      "Honest Money",
+      "D\u00fcsseldorf"
+    ],
+    [
+      "Yana Ugrekhelidze",
+      "Instructions for Survival",
+      "Cologne"
+    ],
+    [
+      "Shoko Hara",
+      "Just a Guy",
+      "Stuttgart"
+    ],
+    [
+      "Loretta Fahrenholz, TRLLM (Jak Ritger, K8 Howl)",
+      "Kim Gordon: Earthquake",
+      "Berlin / Boston"
+    ],
+    [
+      "M+M (Marc Weis, Martin de Mattia)",
+      "Mad Mieter",
+      "Munich"
+    ],
+    [
+      "Amel Alzakout, Khaled Abdulwahed",
+      "Purple Sea",
+      "Leipzig"
+    ],
+    [
+      "Victor Orozco Ramirez",
+      "Revolykus",
+      "Mettlach"
+    ],
+    [
+      "Alex Beriault",
+      "Sometimes a little Sin is good for the Soul",
+      "Bremen"
+    ]
+  ],
+  "US-RI": [
+    [
+      "Steven Subotnick",
+      "Anonymous",
+      "Providence"
+    ]
+  ],
+  "US-MD": [
+    [
+      "Stephanie M. Barber",
+      "Another Horizon",
+      "Baltimore"
+    ]
+  ],
+  "PT": [
+    [
+      "Sandro Aguilar",
+      "Armour",
+      "Lisbon"
+    ],
+    [
+      "Alexandra Ramires (X\u00e1)",
+      "TIE",
+      "Lisbon"
+    ]
+  ],
+  "IT": [
+    [
+      "Loris Giuseppe Nese",
+      "Bad Mood",
+      "Bologna"
+    ]
+  ],
+  "US-NY": [
+    [
+      "Patrick Smith",
+      "Beyond Noh",
+      "New York"
+    ],
+    [
+      "Carson Parish",
+      "Breath Control",
+      "New York"
+    ],
+    [
+      "Ash Goh Hua",
+      "I'm Free Now, You Are Free",
+      "New York / Singapore"
+    ],
+    [
+      "Akosua Adoma Owusu",
+      "King of Sanwi",
+      "Bronx"
+    ],
+    [
+      "Sky Hopinka",
+      "ma\u0142ni \u2013 towards the ocean, towards, the shore",
+      "US-MI"
+    ],
+    [
+      "David Opdyke",
+      "Nothing to See Here",
+      "Ridgewood"
+    ],
+    [
+      "Adrian Garcia Gomez",
+      "Primavera",
+      "New York"
+    ],
+    [
+      "Jess X. Snow",
+      "Safe Among Stars",
+      "Brooklyn"
+    ],
+    [
+      "Nico Reano, Jimena Lucero",
+      "Silver Femme",
+      "New York"
+    ],
+    [
+      "Mark Street, Barbara Hammer",
+      "So Many Ideas Impossible To Do All",
+      "New York"
+    ],
+    [
+      "Ephraim Asili",
+      "The Inheritance",
+      "Hudson"
+    ]
+  ],
+  "CA-QC": [
+    [
+      "Philippe Hamelin",
+      "Blue Lips",
+      "Montreal"
+    ],
+    [
+      "Kara Blake",
+      "Cohabitat",
+      "Montreal"
+    ],
+    [
+      "Maxime Corbeil-Perron",
+      "Displacement",
+      "Montreal"
+    ],
+    [
+      "Isabelle Kanap\u00e9",
+      "Ka tatishtipatakanit (Ethereal)",
+      "Pessamit"
+    ],
+    [
+      "Sarah Seen\u00e9",
+      "Lumen",
+      "Montreal"
+    ],
+    [
+      "Sanaz Sohrabi",
+      "One Image, Two Acts",
+      "Montr\u00e9al / Chicago"
+    ],
+    [
+      "Charles-Andr\u00e9 Coderre",
+      "Reminiscences of 15 musicians in Beirut attempting a re-imagination of the Egyptian classic Ya Garat Al Wadi",
+      "Montr\u00e9al"
+    ]
+  ],
+  "CA-ON": [
+    [
+      "Daniel McIntyre",
+      "Broth of Vigour",
+      "Newmarket"
+    ],
+    [
+      "Penny McCann",
+      "Expo Film (this film is my memory)",
+      "Ottawa"
+    ],
+    [
+      "Chris Kennedy",
+      "The Initiation Well",
+      "Toronto"
+    ],
+    [
+      "Paulette Phillips",
+      "The Quoddy Fold",
+      "Toronto"
+    ]
+  ],
+  "US-TX": [
+    [
+      "Virginia Lee Montgomery",
+      "BUTTERFLY BIRTH BED",
+      "Austin"
+    ],
+    [
+      "Natalia Rocafuerte",
+      "Dream of Emma and Tony",
+      "Brownsville"
+    ]
+  ],
+  "AT": [
+    [
+      "Jyoti Mistry",
+      "Cause of Death",
+      "Gothenburg"
+    ],
+    [
+      "Claudia Larcher",
+      "Collapsing Mies",
+      "Vienna"
+    ],
+    [
+      "Siegfried A. Fruhauf",
+      "Dissolution Prologue (Extended Version)",
+      "Vienna"
+    ],
+    [
+      "Anna Vasof",
+      "Hitting My Head on the World",
+      "Vienna"
+    ],
+    [
+      "NO1 (Peter Kutin, Patrik Lechner, Mathias Lenz)",
+      "ROTO\u042f | Sonic Body",
+      "Vienna"
+    ]
+  ],
+  "IE": [
+    [
+      "P\u00e1raic Mc Gloughlin",
+      "Circular",
+      "Sligo"
+    ]
+  ],
+  "NL": [
+    [
+      "Eliane Esther Bots",
+      "Cloud Forest",
+      "The Hague"
+    ]
+  ],
+  "IR": [
+    [
+      "Siavash Naghshbandi",
+      "Daily Life Of Human",
+      "Tehran"
+    ],
+    [
+      "Ebrahim Mirmalek",
+      "Mt Albban the attrition of time",
+      "Iran / Exton"
+    ]
+  ],
+  "PL": [
+    [
+      "Michalina Musialik",
+      "Dog's Field",
+      "Warsaw"
+    ]
+  ],
+  "CA-SK": [
+    [
+      "Mike Rollo",
+      "Eidolon",
+      "Regina"
+    ]
+  ],
+  "KR": [
+    [
+      "Chaerin Im",
+      "Eyes and Horns",
+      "Seoul"
+    ],
+    [
+      "Woohee Cho",
+      "NSFW (angry yellow meat)",
+      "Seoul"
+    ]
+  ],
+  "US-PA": [
+    [
+      "Amy Lee Ketchum, Ellen Boscov",
+      "First Light",
+      "Philadelphia"
+    ],
+    [
+      "Ebrahim Mirmalek",
+      "Mt Albban the attrition of time",
+      "Exton / Iran"
+    ],
+    [
+      "Ra'anan Alexandrowicz",
+      "THE VIEWING BOOTH",
+      "Philadelphia"
+    ]
+  ],
+  "US-NJ": [
+    [
+      "Jil Guyon",
+      "Heat Wave Hallucination",
+      "Newark"
+    ]
+  ],
+  "SG": [
+    [
+      "Ash Goh Hua",
+      "I'm Free Now, You Are Free",
+      "Singapore / New York"
+    ]
+  ],
+  "EC": [
+    [
+      "Jos\u00e9 Cardoso",
+      "Iwianch, el Diablo Venado",
+      "Cuenca"
+    ]
+  ],
+  "US-MA": [
+    [
+      "Loretta Fahrenholz, TRLLM (Jak Ritger, K8 Howl)",
+      "Kim Gordon: Earthquake",
+      "Boston / Berlin"
+    ],
+    [
+      "Gina Kamentsky",
+      "Stunting Cunts",
+      "Somerville"
+    ],
+    [
+      "Colleen Keough",
+      "Venus Rising",
+      "Amherst"
+    ]
+  ],
+  "US-NC": [
+    [
+      "Kira Bursky",
+      "Lessons From My Nightmares",
+      "Asheville"
+    ]
+  ],
+  "UK": [
+    [
+      "Zohar Dvir",
+      "Mercury\u2019s Retrograde",
+      "London"
+    ],
+    [
+      "Gabriel B\u00f6hmer",
+      "Push This Button if You Begin to Panic",
+      "Winchester"
+    ]
+  ],
+  "US-OK": [
+    [
+      "Meredith Moore",
+      "My Favorite Object",
+      "Okarche"
+    ]
+  ],
+  "RU": [
+    [
+      "Kirill Khachaturov",
+      "Naked",
+      "Korolev"
+    ]
+  ],
+  "AR": [
+    [
+      "Benjam\u00edn Ellenberger",
+      "Night Reflection (IV)",
+      "Ciudad Aut\u00f3noma de Buenos Aires"
+    ]
+  ],
+  "CH": [
+    [
+      "Yannick Mosimann",
+      "Piz Regolith",
+      "Bern"
+    ]
+  ],
+  "US-MI": [
+    [
+      "Stephen Wardell",
+      "Psychic Meat",
+      "Lansing"
+    ],
+    [
+      "Cade Mirabitur",
+      "The Long Fall",
+      "Novi"
+    ],
+    [
+      "Natasha Beste",
+      "Times a God Zillion",
+      "Oxford"
+    ]
+  ],
+  "AU": [
+    [
+      "Dianna Barrie",
+      "Self Portrait With Bag",
+      "Daylesford"
+    ],
+    [
+      "Richard Tuohy, Dianna Barrie",
+      "Valpi",
+      "Daylesford"
+    ]
+  ],
+  "BR": [
+    [
+      "Lucas H. Rossi dos Santos",
+      "Ser Feliz No V\u00e3o / Happy In The Gap",
+      "Rio de Janeiro"
+    ]
+  ],
+  "CN": [
+    [
+      "Ruihong Tang",
+      "Summer Summer",
+      "China"
+    ]
+  ],
+  "IL": [
+    [
+      "Tom Prezman, Tzor Edery",
+      "Tamou",
+      "Jerusalem"
+    ]
+  ],
+  "US-NM": [
+    [
+      "Bryan Konefsky",
+      "Teatro Principal",
+      "Albuquerque"
+    ]
+  ],
+  "CR": [
+    [
+      "Julian Gallese",
+      "Thank you",
+      "San Jos\u00e9"
+    ]
+  ],
+  "IN": [
+    [
+      "Aman Wadhan",
+      "Usambara Violet",
+      "Chandigarh"
+    ]
+  ]
+};
+
+am4core.ready(function() {
+
+// Themes begin
+am4core.useTheme(am4themes_animated);
+// Themes end
+
+// Popup formatter
+function formatPopup(entries) {
+  var text = "<table>"
+  for (const entry of entries) {
+    text = text + `<tr><td>${entry[0]}</td><td><i>${entry[1]}</i></td><td>${entry[2]}</td></tr>`;
+  }
+  text = text + "</table>"
+  return text
+}
+
+// Create map instance
+var chart = am4core.create("chartdiv", am4maps.MapChart);
+
+// chart popup helper
+function onHit(ev) {
+  chart.closeAllPopups();
+  var id = ev.target.dataItem.dataContext.id;
+  if (id in films) {
+    var popup = chart.openPopup(formatPopup(films[id]));
+    popup.showCurtain = true;
+    popup.elements.title.textContent = "From " + ev.target.dataItem.dataContext.name;
+  }
+}
+
+// Set map definition
+chart.geodata = am4geodata_worldLow;
+
+// Set projection
+chart.projection = new am4maps.projections.Miller();
+
+// Series for World map
+var worldSeries = chart.series.push(new am4maps.MapPolygonSeries());
+worldSeries.exclude = ["AQ", "US", "CA"];
+worldSeries.useGeodata = true;
+ 
+var polygonTemplate = worldSeries.mapPolygons.template;
+polygonTemplate.nonScalingStroke = true;
+
+// Hover state
+//var hs = polygonTemplate.states.create("hover");
+//hs.properties.fill = hoverColor;
+  
+// Filmmaker popup
+polygonTemplate.events.on("hit", onHit);
+
+// Color countries that are participating
+polygonTemplate.events.on("ready", function() {
+  for (const [cc, v] of Object.entries(films)) {
+    var poly = worldSeries.getPolygonById(cc);
+    if (poly) {
+      poly.fill = defaultColor;
+      poly.tooltipText = "{name}";
+      var hs = poly.states.create("hover");
+      hs.properties.fill = hoverColor;
+    }
+  }
+});
+
+// Series for United States map
+var usaSeries = chart.series.push(new am4maps.MapPolygonSeries());
+usaSeries.geodata = am4geodata_usaLow;
+
+var usPolygonTemplate = usaSeries.mapPolygons.template;
+usPolygonTemplate.nonScalingStroke = true;
+
+// Hover state
+//var hs = usPolygonTemplate.states.create("hover");
+//hs.properties.fill = hoverColor;
+
+// US Filmmaker popup
+usPolygonTemplate.events.on("hit", onHit);
+
+// Color states that are participating
+usPolygonTemplate.events.on("ready", function() {
+  for (const [cc, v] of Object.entries(films)) {
+    var poly = usaSeries.getPolygonById(cc);
+    if (poly) {
+      poly.fill = defaultColor;
+      poly.tooltipText = "{name}";
+      var hs = poly.states.create("hover");
+      hs.properties.fill = hoverColor;
+    }
+  }
+});
+
+// Series for Canada map
+var canadaSeries = chart.series.push(new am4maps.MapPolygonSeries());
+canadaSeries.geodata = am4geodata_canadaLow;
+
+var caPolygonTemplate = canadaSeries.mapPolygons.template;
+caPolygonTemplate.nonScalingStroke = true;
+
+// Hover state
+//var hs = caPolygonTemplate .states.create("hover");
+//hs.properties.fill = hoverColor;
+
+// CA Filmmaker popup
+caPolygonTemplate.events.on("hit", onHit);
+
+// Color provinces that are participating
+caPolygonTemplate.events.on("ready", function() {
+  for (const [cc, v] of Object.entries(films)) {
+    var poly = canadaSeries.getPolygonById(cc);
+    if (poly) {
+      poly.fill = defaultColor;
+      poly.tooltipText = "{name}";
+      var hs = poly.states.create("hover");
+      hs.properties.fill = hoverColor;
+    }
+  }
+});
+
+
+}); // end am4core.ready()
+</script>
+
+<!-- HTML -->
+<div id="chartdiv"></div>
